@@ -1,1 +1,543 @@
 python-3.9.5
+Problem1:
+import java.awt.FlowLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class problem1 extends JFrame{
+    private ImageIcon image1;
+    private JLabel label;
+    private ImageIcon image2;
+    private JLabel label2;
+
+    problem1()  {
+        setLayout(new FlowLayout());
+        image1= new ImageIcon(getClass().getResource("ice.jpg"));
+        this.setIconImage(image1.getImage());
+        label=new JLabel(image1);
+        add(label);
+        image2= new ImageIcon(getClass().getResource("pust.png"));
+        label2= new JLabel(image2);
+        add(label2);
+    }
+    public static void main(String[] args) {
+        problem1 gui= new problem1();
+        gui.setVisible(true);
+        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gui.setLocation(600, 350);
+        gui.setTitle("I am Niloy Jyoti Roy");
+        gui.pack();
+    }
+    
+}
+Prblem2:
+import javax.swing.*;
+import java.awt.event.*;
+public class bill extends JFrame implements ActionListener{
+    JLabel l;
+    JCheckBox c1,c2,c3;
+    JButton b;
+    bill(){
+        l=new JLabel("Food Ordering System:");
+        l.setBounds(50, 50, 300, 20);
+        add(l);
+        c1=new JCheckBox("Pizza $100");
+        c1.setBounds(100, 100, 150, 20);
+        add(c1);
+        c2=new JCheckBox("Burger $40");
+        c2.setBounds(100, 150, 150, 20);
+        add(c2);
+        c3=new JCheckBox("Tea $20");
+        c3.setBounds(100, 200, 150, 20);
+        add(c3);
+        b=new JButton("Order");
+        b.setBounds(100, 250, 80, 30);
+        add(b);
+        b.addActionListener(this);
+        setSize(400, 400);
+        setLayout(null);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+    public void actionPerformed(ActionEvent e){
+        float amount=0;
+        String message="";
+        if (c1.isSelected()) {
+            amount+=100;
+            message+="Pizza $100\n";
+        }
+        if (c2.isSelected()) {
+            amount+=40;
+            message+="Burger $40\n";
+        }
+        if (c3.isSelected()) {
+            amount+=20;
+            message+="Tea $20\n";
+        }
+        message+="----------------\n";
+        JOptionPane.showMessageDialog(this, message+"Total: "+amount);
+    }
+    public static void main(String[] args) {
+        new bill();
+    }
+}
+Problem 3
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class userform extends JFrame implements ActionListener {
+    private JLabel idl, namel,depl,passl,cpassl;
+    private JTextField idf,namef,depf;
+    private JPasswordField passf,cpassf;
+    private JButton b;
+
+    userform() {
+        super("Student Form");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+        idl=new JLabel("ID: ");
+        namel=new JLabel("Name: ");
+        depl=new JLabel("Department: ");
+        passl= new JLabel("Password: ");
+        cpassl=new JLabel("Confirm Password: ");
+        idf=new JTextField(20);
+        namef=new JTextField(20);
+        depf=new JTextField(20);
+        passf= new JPasswordField(20);
+        cpassf=new JPasswordField(20);
+        b=new JButton("Register");
+        b.addActionListener(this);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc= new GridBagConstraints();
+        
+        // first row
+        gbc.gridx=0;
+        gbc.gridy=0;
+        gbc.anchor=GridBagConstraints.LINE_END;
+        gbc.insets=new Insets(0, 0, 5, 0);
+        add(idl,gbc);
+        
+        gbc.gridx= 1;
+        gbc.gridy=0;
+        gbc.anchor=GridBagConstraints.LINE_START;
+        add(idf,gbc);
+        //  2nd row
+        gbc.gridx=0;
+        gbc.gridy=1;
+        gbc.anchor=GridBagConstraints.LINE_END;
+        gbc.insets=new Insets(0, 0, 5, 0);
+        add(namel,gbc);
+        
+        gbc.gridx=1;
+        gbc.gridy=1;
+        gbc.anchor=GridBagConstraints.LINE_START;
+        add(namef,gbc);
+        //3rd
+        gbc.gridx=0;
+        gbc.gridy=2;
+        gbc.anchor=GridBagConstraints.LINE_END;
+        add(depl,gbc);
+        
+        gbc.gridx=1;
+        gbc.gridy=2;
+        gbc.anchor=GridBagConstraints.LINE_END;
+        add(depf,gbc);
+        //4th
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(passl, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(passf, gbc);
+
+        // Fifth Row
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(cpassl, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(cpassf, gbc);
+
+        // Sixth Row
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        add(b, gbc);
+        setVisible(true);
+
+    }
+    @Override
+    public void actionPerformed(ActionEvent e){
+        String error="",id=idf.getText(),name=namef.getText(),dep=depf.getText(),pass=passf.getText(),cpass=cpassf.getText();
+        if(id.equals("")) error="Please Provide ID";
+        else if (name.equals("")) error= "Please Provide name";
+        else if (dep.equals("")) error="Please Provide dep";
+        else if (pass.equals("")) error="Please Provide pass";
+        else if (cpass.equals("")) error="Please Provide cpass";
+        else if (!pass.equals(cpass)) error="pass missmatch";
+        if (!error.equals("")) {
+            JOptionPane.showMessageDialog(this, error,"ho ho",JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "ha ha","ho ho",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    public static void main(String[] args) {
+        new userform();
+    }
+}
+Problem 4:
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+public class Calculator extends JFrame implements ActionListener
+{    
+   JButton b10,b11,b12,b13,b14,b15,b16; 
+   JButton b[]=new JButton[10];
+    int i,r,n1,n2;
+    JTextField res;
+    char op; 
+   public Calculator()
+  {
+     super("Calulator");
+      setLayout(new BorderLayout());
+      JPanel p=new JPanel();
+      p.setLayout(new GridLayout(5,4));
+      for(int i=0;i<=9;i++)
+      {
+        b[i]=new JButton(i+"");
+        p.add(b[i]);
+        b[i].addActionListener(this);
+      }
+      b10=new JButton("+");
+      p.add(b10);
+      b10.addActionListener(this);
+ 
+      b11=new JButton("-");
+      p.add(b11);
+      b11.addActionListener(this);
+ 
+      b12=new JButton("*");
+      p.add(b12);
+      b12.addActionListener(this);
+      
+ 
+      b13=new JButton("/");
+      p.add(b13);
+      b13.addActionListener(this);
+ 
+      b14=new JButton("=");
+      p.add(b14);
+      b14.addActionListener(this);
+ 
+      b15=new JButton("C");
+      p.add(b15);
+      b15.addActionListener(this);
+      
+      b16=new JButton("hoho");
+      p.add(b16);
+      b16.addActionListener(this);
+ 
+      res=new JTextField(10);
+      add(p,BorderLayout.CENTER);
+      add(res,BorderLayout.NORTH);
+      setVisible(true);
+      setDefaultCloseOperation(EXIT_ON_CLOSE);
+      setSize(200,200);
+     }
+public void actionPerformed(ActionEvent ae)
+{
+  JButton pb=(JButton)ae.getSource();
+	if(pb==b15)
+	{
+	 r=n1=n2=0;
+	 res.setText("");
+	}
+	else
+		if(pb==b14)
+		{
+ 		 n2=Integer.parseInt(res.getText());
+  		 eval();
+  		 res.setText(""+r);
+		}
+ 
+		else
+		{
+ 		  boolean opf=false;
+ 		  if(pb==b10)
+			{ op='+';
+			  opf=true;
+			}
+ 		  if(pb==b11)
+			{ op='-';opf=true;}
+		  if(pb==b12)
+			{ op='*';opf=true;}
+		  if(pb==b13)
+			{ op='/';opf=true;}
+	
+		  if(opf==false)
+		  {
+  		   for(i=0;i<10;i++)
+		   {
+		  	if(pb==b[i])
+     		  	{
+           	   	String t=res.getText();
+           		t+=i;
+            		res.setText(t);
+		  	}
+		   }
+		  }
+		  else
+		  {
+    			n1=Integer.parseInt(res.getText());
+     			res.setText("");
+		  }
+		}
+}
+int eval()
+{
+	switch(op)
+	{
+ 	case '+':   r=n1+n2;  break;
+ 	case '-':    r=n1-n2;   break;
+ 	case '*':    r=n1*n2; break;
+ 	case '/':    r=n1/n2; break;
+ 
+	}
+	return 0;
+}
+ 
+  public static void main(String arg[])
+  {
+      new Calculator();
+   }
+}
+Problem5:
+import java.io.*;
+import java.util.concurrent.TimeUnit;
+public class problem_5 extends Thread{
+    public void run()
+    {
+        // This is a thread
+        for(int i=0; i<=5; i++){
+            System.out.println("Wassup! Nigga !");
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        problem_5 obj=new problem_5();
+        obj.start();
+        for(int i=0; i<=10; i++){
+            System.out.println(" "+i);
+            TimeUnit.SECONDS.sleep(1);
+        }
+
+    }
+}
+Problem 6:
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.Scanner;
+public class client {
+    public static void main(String[] args) throws IOException {
+        int number,temp;
+        Scanner sc= new Scanner(System.in);
+        Socket s= new Socket("localhost",8080);
+        Scanner sc1= new Scanner(s.getInputStream());
+        System.out.println("Enter message:");
+        number=sc.nextInt();
+        PrintStream p= new PrintStream(s.getOutputStream());
+        p.println(number);
+        temp=sc1.nextInt();
+        System.out.println(temp);
+    }
+}
+
+
+
+Server side
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+
+public class server {
+    public static void main(String[] args) throws IOException {
+        int number,temp;
+        ServerSocket s1= new ServerSocket(8080);
+        Socket ss= s1.accept();
+        Scanner sc= new Scanner(ss.getInputStream());
+        number=sc.nextInt();
+        temp=number*3;
+        PrintStream p = new PrintStream(ss.getOutputStream());
+        p.println(temp);
+    }
+  
+}
+Extra cal
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+public class calculatorS implements ActionListener {
+    JFrame frame;
+    JTextField textField;
+    JButton[] numberButton= new JButton[10];
+    JButton[] functionButton= new JButton[7];
+    JButton addButton,subButton,mulButton,divButton;
+    JButton equButton,clrButton,decButton;
+    JPanel panel;
+
+    double num1=0,num2=0,result=0;
+    char operator;
+
+    calculatorS(){
+        frame=new JFrame("Calculator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(420,550);
+        frame.setLayout(null);
+
+        textField=new JTextField();
+        textField.setBounds(30,25,330,50);
+        textField.setEditable(false);
+        frame.add(textField);
+
+        for (int i=0;i<10;i++){
+            numberButton[i]=new JButton(String.valueOf(i));
+            numberButton[i].addActionListener(this);
+            numberButton[i].setFocusable(false);
+        }
+
+        addButton=new JButton("+");
+        subButton=new JButton("-");
+        mulButton=new JButton("*");
+        divButton=new JButton("/");
+        equButton=new JButton("=");
+        clrButton=new JButton("C");
+        decButton=new JButton(".");
+
+        functionButton[0]=addButton;
+        functionButton[1]=subButton;
+        functionButton[2]=mulButton;
+        functionButton[3]=divButton;
+        functionButton[4]=equButton;
+        functionButton[5]=clrButton;
+        functionButton[6]=decButton;
+
+        for (int i=0;i<7;i++){
+            functionButton[i].addActionListener(this);
+            functionButton[i].setFocusable(false);
+        }
+
+        panel=new JPanel();
+        panel.setBounds(50,150,300,300);
+        panel.setLayout(new GridLayout(4,4,10,10));
+
+        panel.add(numberButton[1]);
+        panel.add(numberButton[2]);
+        panel.add(numberButton[3]);
+        panel.add(addButton);
+        panel.add(numberButton[4]);
+        panel.add(numberButton[5]);
+        panel.add(numberButton[6]);
+        panel.add(subButton);
+        panel.add(numberButton[7]);
+        panel.add(numberButton[8]);
+        panel.add(numberButton[9]);
+        panel.add(mulButton);
+        panel.add(decButton);
+        panel.add(numberButton[0]);
+        panel.add(equButton);
+        panel.add(divButton);
+        frame.add(panel);
+
+        clrButton.setBounds(250,90,100,50);
+        frame.add(clrButton);
+
+        frame.setVisible(true);
+
+
+    }
+
+    public static void main(String[] args) {
+        calculatorS calc=new calculatorS();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for (int i=0;i<10;i++){
+            if (e.getSource()==numberButton[i]){
+                textField.setText(textField.getText().concat(String.valueOf(i)));
+            }
+        }
+        if (e.getSource()==decButton){
+            textField.setText(textField.getText().concat("."));
+        }
+        if (e.getSource()==addButton){
+            num1=Double.parseDouble(textField.getText());
+            operator='+';
+            textField.setText("");
+        }
+        if (e.getSource()==subButton){
+            num1=Double.parseDouble(textField.getText());
+            operator='-';
+            textField.setText("");
+        }
+        if (e.getSource()==mulButton){
+            num1=Double.parseDouble(textField.getText());
+            operator='*';
+            textField.setText("");
+        }
+        if (e.getSource()==divButton){
+            num1=Double.parseDouble(textField.getText());
+            operator='/';
+            textField.setText("");
+        }
+        if (e.getSource()==equButton){
+            num2=Double.parseDouble(textField.getText());
+            switch (operator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    result = num1 / num2;
+                    break;
+            }
+            textField.setText(String.valueOf(result));
+            num1=result;
+        }
+        if (e.getSource()==clrButton){
+            textField.setText("");
+            num1=0;
+        }
+    }
+}
