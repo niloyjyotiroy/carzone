@@ -1,0 +1,256 @@
+Short Questions of Digital Communication
+UNIT 1: PULSE MODULATION
+1. Define Nyquist rate.
+Ans: Let the signal be band limited to “W” Hz. Then Nyquist rate is given as,
+Nyquist rate = 2W samples/sec
+Aliasing will not take place if sampling rate is greater than Nyquist rate.
+2. What is meant by aliasing effect?
+Ans: Aliasing effect takes place when sampling frequency is less than Nyquist rate. Under such
+condition, the spectrum of the sampled signal overlaps with itself. Hence higher frequencies take the
+form of lower frequencies. This interference of the frequency components is called as aliasing effect.
+3. Define PWM.
+Ans: PWM is basically pulse width modulation. Width of the pulse changes according to amplitude
+of the modulating signal. It is also referred as pulse duration modulation or PDM.
+4. State Sampling theorem.
+Ans: A band limited signal of finite energy, which has no frequency components higher than W Hz,
+may be completely recovered from the knowledge of its samples taken at the rate of 2W samples per
+second.
+5. Mention the merits of DPCM. (Differential pulse-code modulation)
+Ans: 1. Bandwidth requirement of DPCM is less compared to PCM.
+2. Quantization error is reduced because of prediction filter
+3. Numbers of bits used to represent one sample values are also reduced compared to PCM.
+6. What is the main difference in DPCM and DM? (Differential pulse-code modulation and
+Delta Modulation)
+Ans: DM encodes the input sample by one bit. It sends the information about + δ or -δ, i.e. step rise
+or fall. DPCM can have more than one bit of encoding the sample. It sends the information about
+difference between actual sample value and the predicted sample value.
+7. How the message can be recovered from PAM?
+Ans: The message can be recovered from PAM by passing the PAM signal through
+reconstruction filter integrates amplitude of PAM pulses. Amplitude reconstruction signal is done to
+remove amplitude discontinuities due to pulses.
+8. What is meant by quantization?
+Ans: While converting the signal value from analog to digital, quantization is performed. The analog
+value is assigned to nearest digital value. This is called quantization. The quantized value is then
+converted into equivalent binary value. The quantization levels are fixed depending upon the number
+of bits. Quantization is performed in every Analog to Digital Conversion.
+9. The signal to quantization noise ratio in a PCM system depends on what criteria?
+Ans: The signal to quantization noise ratio in PCM is given as, (S/N)db ≤(4.8+6v)dB
+Here v is the number of bits used to represent samples in PCM. Hence signal to quantization noise
+ratio in PCM depends upon the number of bits or quantization levels
+10. What is meant by adaptive delta modulation?
+Ans: In adaptive delta modulation, the step size is adjusted as per the slope of the input signal. Step
+size is made high if slope of the input signal is high. This avoids slope overload distortion.
+11. What is the advantage of delta modulation over pulse modulation schemes?
+Ans: Delta modulation encodes one bit per samples. Hence signalling rate is reduced in DM.
+12. What should be the minimum bandwidth required to transmit a PCM channel?
+Ans: The minimum transmission bandwidth in PCM is given as,
+BT = vW
+Here v is the number of bits used to represent one pulse. W is the maximum signal frequency.
+13. What is the advantage of delta modulation over PCM?
+Ans: Delta modulation uses one bit to encode on sample. Hence bit rate of delta modulation is low
+compared to PCM.
+14. What are the two limitations of delta modulation?
+Ans: 1 Slope of overload distortion. 2. Granular noise.
+15. What are the advantages of the Delta modulation?
+Ans: 1. Delta modulation transmits only one bit for one sample. Thus the signaling rate and
+transmission channel bandwidth is quite small for delta modulation.
+2. The transmitter and receiver implementation is very much simple for delta modulation.
+There is no analog to digital converter involved in delta modulation.
+UNIT 2: BASEBAND PULSE TRANSMISSION
+1. What is intersymbol interference in baseband binary PAM systems?
+Ans: In baseband binary PAM, symbols are transmitted one after another. These symbols are
+separated by sufficient time durations. The transmitter, channel and receiver acts as a filter to this
+baseband data. Because of the filtering characteristics, transmitted PAM pulses are spread in time.
+2. What are eye pattern?
+Ans: Eye pattern is used to study the effect of ISI in baseband transmission.
+1) Width of eye opening defines the interval over which the received wave can be sampled without
+error from ISI.
+2) The sensitivity of the system to timing error is determined by the rate of closure of the eye as the
+sampling time is varied.
+3) Height of the eye opening at sampling time is called margin over noise.
+3. Why do you need adaptive equalization in a switched telephone network?
+Ans: In switched telephone network the distortion depends upon
+1) Transmission characteristics of individual links.
+2) Number of links in connection.
+Hence fixed pair of transmit and receive filters will not serve the equalization problem. The
+transmission characteristics keep on changing. Therefore adaptive equalization is used.
+4. What are the necessity of adaptive equalization?
+Ans: Most of the channels are made up of individual links in switched telephone
+network, the distortion induced depends upon
+1 ) transmission characteristics of individual links
+2) number of links in connection
+5. Define the principle of adaptive equalization?
+Ans: The filters adapt themselves to the dispersive effects of the channel that is the coefficients of
+the filters are changed continuously according to the received data. The filter coefficients are changed
+in such a way that the distortion in the data is reduced.
+6. Define duobinary encoding?
+Ans: Duobinary encoding reduces the maximum frequency of the base band signal the “word duo”
+means to the double transmission capacity of the binary system.
+7. Define the term ISI?
+Ans: The presence of outputs due to other bits interference with the output of
+required bit this effect is called inter symbol interference (ISI).
+8. Write the performance of data transmission system using eye pattern technique?
+Ans: The width of the eye opening defines the interval over which the received wave can be sampled
+without error from inter symbol interference. The sensitivity of the system to timing error is
+determined by the rate of closure of the eye as the sampling time is varied.
+9. What is the necessity of equalization?
+Ans: When the signal is passed through the channel distortion is introduced in terms of
+1) amplitude
+2) delay this distortion creates problem of ISI.
+The detection of the signal also become difficult this distraction can be compensated with the help of
+equalizer.
+10. What is raised cosine spectrum?
+Ans: In the raised cosine spectrum, the frequency response P(f) decreases towards zero gradually
+That is there is no abrupt transition.
+11. What is nyquist Bandwidth?
+Ans: The Bo is called nyquist bandwidth. The nyquist bandwidth is the minimum transmission
+bandwidth for zero ISI.
+UNIT 3: PASSBAND DELTA TRANSMISSION
+1. Mention the need of optimum transmitting and receiving filter in baseband data
+transmission.
+Ans: When binary data is transmitted over the baseband channel, noise interfaces with it. Because of
+this noise interference, errors are introduced in signal detection. Optimum filter performs two
+functions while receiving the noisy signal:
+1) Optimum filter integrates the signal during the bit interval and checks the output at the time instant
+where signal to noise ratio is maximum.
+2) Transfer function of the optimum filter is selected so as to maximize signal to noise ratio.
+3) Optimum filter minimizes the probability of error
+2. Define ASK.
+Ans: In ASK, carrier is switched on when binary 1 is to be transmitted and it is switched off when
+binary D is to be transmitted ASK is also called on-off keying.
+3. What is meant by DPSK?
+Ans: In DPSK, the input sequence is modified. Let input sequence be 𝑑(𝑡) and output sequence be
+𝑏(𝑡). Sequence 𝑏(𝑡) changes level at the beginning of each interval in which 𝑑(𝑡) = 1 and it does
+not changes level when 𝑑(𝑡) = 0. When 𝑏(𝑡) changes level, phase of the carrier is changed. And as
+stated above, 𝑏(𝑡) changes 𝑡. its level only when 𝑑(𝑡) = 1. This means phase of the carrier is
+changed only if 𝑑(𝑡) = 1. Hence the technique is called Differential PSK.
+4. Explain coherent detection?
+Ans: In coherent detection, the local carrier generated at the receiver is phase locked with the carrier
+at the transmitter. The detection is done by correlating received noisy signal and locally generated
+carrier. The coherent detection is a synchronous detection.
+5. What is the difference between PSK and FSK?
+Ans: In PSK, phase of the carrier is switched according to input bit sequence. In FSK frequency of
+the carrier is switched according to input bit sequence. FSK needs double of the bandwidth of PSK.
+6. What is meant by coherent ASK?
+Ans: In coherent ASK, correlation receiver is used to detect the signal. Locally generated carrier is
+correlated with incoming ASK signal. The locally generated carrier is in exact phase with the
+transmitted carrier. Coherent ASK is also called as synchronous ASK.
+7. What is the major advantage of coherent PSK over coherent ASK?
+Ans: ASK is on-off signaling, whereas the modulated carrier is continuously transmitted in PSK.
+Hence peak power requirement is more ASK, whereas it is reduced in case of PSK
+8. Explain the model of bandpass digital data transmission system?
+Ans: The bandpass digital data transmission system consists of source, encoder and modulator in the
+transmitter. Similarly receiver, decoder and destination form the transmitter.
+9. What is matched filter?
+Ans: The matched filter is a baseband signal receiver, which works in presence of white Gaussian
+noise. The impulse response of the matched response of the matched filter is matched to the shape of
+the input signal.
+10. What is correlator ?
+Ans: Correlator is the coherent receiver. It correlates the received noisy signal 𝑓(𝑡) with the locally
+generated replica of the unknown signal x(t). It’s output is denoted as r(t).
+11. Bring out the difference between coherent & non coherent binary modulation scheme.
+Ans: a. Coherent detection:
+In this method the local carrier generated at the receiver is phase locked with the carrier at the
+transmitter. Hence it is called synchronous detection.
+b. Non coherent detection:
+In this method, the receiver carrier need not be phase locked with transmitter carrier. Hence it is
+called envelope detection.
+12. Highlight the major difference between a QPSK & MSK signal.
+Ans: MSK signal have continuous phase in all the cases, whereas QPSK has phase
+shift of π/2 or π.
+13. List the advantages of Passband transmission
+Ans: a. Long distance.
+b. Analog channels can be used for transmission.
+c. Multiplexing techniques can be used for bandwidth conservation.
+d. Transmission can be done by using wireless channel also.
+14. List the requirements of Passband transmission.
+Ans: a. Maximum data transmission rate.
+b. Minimum probability of symbol error.
+c. Minimum transmitted power.
+UNIT – 4: SPREAD SPECTRUM MODULATION
+1. Define spread spectrum communication
+Ans: In spread spectrum communication the transmitted data sequence occupies much more band
+width than the minimum required bandwidth. Special code is used to spread the bandwidth of the
+message signal. This special code is known only to authorize receiver. Hence the transmitted signal
+is received only by authorized receiver. Unwanted receivers cannot receive the signal. Thus spread
+spectrum communication provides secure transmission of data.
+2. What is pseudo noise sequence?
+Ans: Pseudo noise sequence is a noise like high frequency signal. The sequence is not completely
+random, but it is generated by well-defined logic. Hence it is called “pseudo” noise sequence. Pseudo
+noise sequences are used in spread spectrum communication for spreading message signals.
+3. What is direct sequence spread spectrum modulation
+Ans: In direct sequence spread spectrum modulation, the pseudo-noise sequence is directly
+modulated with data sequence. Thus pseudo-noise sequence acts as high frequency carrier and data
+sequence acts as low frequency modulating signal. The pseudo-noise sequence and data sequence are
+applied to a product modulator. The output of product modulator can be used directly or it can further
+generate BPSK signal for long distance communication.
+4. What is frequency hop spread spectrum modulation?
+Ans: In frequency hop spread spectrum, the data is transmitted in different frequency slots. These
+frequency slots are selected with the help of pseudo-noise sequence. Selection of frequency slots is
+called frequency hopping. The bandwidth of frequency hop spread spectrum is very much large
+compared to direct sequences spread spectrum. Frequency hop spread spectrum is of two types: I)
+slow frequency hopping and ii) fast frequency hopping.
+5. State four applications of spread spectrum.
+Ans: I) Spread spectrum has the ability to resist the effect of intentional jamming
+ii) Spread spectrum is used in mobile communications. This is because the spread spectrum signal
+has the ability to resist the effects of multipath fading.
+iii) Spread spectrum communication are used in distance measurement.
+iv) Spread spectrum communications are secure. This secrecy capability of spread spectrum is used
+in military as well as in many commercial applications.
+6. When is the PN sequence called as maximal length sequence?
+Ans: When the PN sequence has the length of 2m - 1, it is called maximal length sequence.
+7. What are the applications of spread spectrum modulation?
+Ans: (i) Multipath access capability.
+(ii) Multipath protection in mobile communication
+(iii) Low probability intercept.
+(iv) Interference rejection.
+(v) To provide antijam capability.
+(vi) Distance measurements.
+(vii) Selective calling
+8. Define frequency hopping.
+Ans: The frequency of the carrier is changed (hopped) according to bits of PN sequence.
+Types: I) Slow frequency hopping
+II) Fast frequency hopping
+9. What are the Advantages of DS-SS system.
+Ans: 1. This system has best noise and antijam performance.
+2. Unrecognized receivers find it most difficult to detect direct sequence signals.
+3. It has best discrimination against multipath signals.
+10. What are the Disadvantages of DS-SS system. 
+Ans: 1. It requires wideband channel with small phase distortion.
+2. It has long acquisition time.
+3. The pseudo–noise generator should generate sequence at high rates
+4. This system is distance relative.
+11. What are the Advantages of FH-SS System
+Ans: 1. These systems bandwidth (spreads) are very large.
+2. They can be programmed to avoid some portions of the spectrum
+3. They have relatively short acquisition time.
+4. The distance effect is less.
+12. What are the Disadvantages of FH-SS System
+Ans: 1. Those systems need complex frequency synthesizers
+2. They are not useful for range and range-rate measurement.
+3. They need error correction.
+13. Comparison between DS-SS and FH-SS
+Sl. Parameter Direct sequence spread
+spectrum
+Frequency hop spread
+spectrum
+1 Definition PN sequence of large
+bandwidth is mulitplied with
+narrow band data signal
+Data bits are transmitted in
+different frequency slots
+which
+are changed by PN
+sequence
+2 Effect of
+distance
+This system is distance
+relative
+Effect of distance is less in
+this system
+3 Acquisition
+time
+Acquisition time is long Acquisition time is short
+14. What are the Application of Direct Sequence Spread Spectrum Signals?
+Ans: Antijamming with the help of direct sequence spread spectrum signals. Low delectability signal
+transmission or low probability intercept.
