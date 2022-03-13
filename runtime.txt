@@ -1,555 +1,241 @@
-python-3.9.5
-%ASK
-clc;
-clear all;
-close all;
-x=[1 0 1 0 1 0 1 0 1];
-bp=0.000001;
-disp('Binary Information at transmitter');
-disp(x);
-%Representation of Transmitting binary information as digital signal
-bit=[];
-for n=1:1:length(x)
- if x(n)==1;
- se=ones(1,100);
- else
- x(n)==0;
- se=zeros(1,100);
- end
- bit=[bit se];
-end
-t1=bp/100:bp/100:100*length(x)*(bp/100);
-subplot(3,1,1)
-plot(t1,bit,'linewidth',2.5);
-grid on;
-axis([0 bp*length(x) -0.5 1.5]);
-ylabel('Amplitude (volt)');
-xlabel('Time (sec)');
-title('Transmitting Information as Digital Signal');
-%Binary ASK Modulation
-A1=10;
-A2=5;
-br=1/bp;
-f=br*10;
-t2=bp/99:bp/99:bp;
-ss=length(t2);
-m=[];
-for(i=1:1:length(x))
- if x(i)==1;
- y=A1*cos(2*pi*f*t2);
- else
- y=A2*cos(2*pi*f*t2);
- end
- m=[m y];
-end
-t3=bp/99:bp/99:bp*length(x);
-subplot(3,1,2)
-plot(t3,m);
-grid on;
-xlabel('Time(sec)');
-ylabel('Amplitude (volt)');
-title('Waveform for binary ASK Modulation corresponding binary information');
-%Binary ASK Demodulation
-mn=[];
-for n=ss:ss:length(m)
- t=bp/99:bp/99:bp;
- y=cos(2*pi*f*t);
- mm=y.*m((n-(ss-1)):n);
- t4=bp/99:bp/99:bp;
- z=trapz(t4,mm);
- zz=round((2*z/bp));
- if(zz>7.5)
- a=1;
- else
- a=0;
- end
- mn=[mn a];
-end
-disp('Binary Information at Receiver');
-disp(mn);
-%Represntation of Binary data into Digital signal
-bit=[];
-for n=1:length(mn)
- if mn(n)==1;
- se=ones(1,100);
- else
- se=zeros(1,100);
- end
- bit=[bit se];
-end
-t4=bp/100:bp/100:100*length(mn)*(bp/100);
-subplot(3,1,3)
-plot(t4,bit,'linewidth',2.5);
-grid on;
-axis([0 bp*length(mn) -0.5 1.5]);
-xlabel('Time(sec)');
-ylabel('Amplitude (volt)');
-title('Received information as Digital Signal');
-
-
-
-
-
-%Bipolar Return to Zero Signaling
-clc;
-clear all;
-close all;
-N=10; %Number of bits
-n=randi([0,1],1,N) %Random bit generation
-%Binary to Bipolar Conversion
-f=1;
-for m=1:N
- if n(m)==1
- if f==1
- nn(m)=1;
- f=-1;
- else
- nn(m)=-1;
- f=1;
- end
- else
- nn(m)=0;
- end
-end
-nn
-%Bipolar RZ Pulse Shaping
-i=1;
-a=0; %Initial value for the first half cycle
-b=0.5; %Initial value for the second half cycle
-t=0:0.01:length(n);
-for j=1:length(t)
- if t(j)>=a && t(j)<=b %Condition for the first half cycle
- y(j)=nn(i); %Assign first 50 values for
- elseif t(j)>b && t(j)<=i %Condition for the Second half cycle
- y(j)=0; %Set all values 0 for the second half cycle
- else
- i=i+1; %Binary input data index increment
- a=a+1; %Initial value for the first half cycle increment
- b=b+1; %Initial value for the second half cycle increment
- end
- end
- plot(t,y,'lineWidth', 2); %Linewidth 2 for clear visualization
- axis([0,N,-1.5,1.5]); %Axis set-up
- grid on;
- title('Bipolar return-to-zero (BRZ) signaling');
-
-
-
-
-
-
-%FSK Modulation and Demodulation
-clc;
-clear all;
-close all;
-x=[1 1 0 1 0 1];
-bp= 0.000001;
-disp('Binary information at transmitter');
-disp(x);
-% Representation of Transmitting binary information as digital signal
-bit=[];
-for n=1:1:length(x)
- if x(n)==1;
- se=ones(1,100);
- else x(n)==0;
- se=zeros(1,100);
- end
- bit=[bit se];
-end
-t1=bp/100:bp/100:100*length(x)*(bp/100);
-subplot(3,1,1);
-plot(t1,bit,'linewidth',2.5);
-grid on;
-axis([0 bp*length(x) -0.5 1.5]);
-ylabel('amplitude(volt)');
-xlabel('time(sec)');
-title('Transmitting information as digital signal');
-%Binary FSK Modulation
-A=5;
-br=1/bp;
-f1=br*8;
-f2=br*2;
-t2=bp/99:bp/99:bp;
-ss=length(t2);
-m=[];
-for(i=1:1:length(x))
- if(x(i)==1)
- y=A*cos(2*pi*f1*t2);
- else
- y=A*cos(2*pi*f2*t2);
- end
- m=[m y];
-end
-t3=bp/99:bp/99:bp*length(x);
-subplot(3,1,2);
-plot(t3,m);
-xlabel('Time(sec)');
-ylabel('Amplitude(volt)');
-title('Waveform for binary FSK modulation corresponding binary information');
-% Binary FSK Demodulation
-mn=[];
-for n=ss:ss:length(m)
- t=bp/99:bp/99:bp;
- y1=cos(2*pi*f1*t)
- y2=cos(2*pi*f2*t)
- mm=y1.*m((n-(ss-1)):n);
- mmm=y2.*m((n-(ss-1)):n);
- t4=bp/99:bp/99:bp;
- z1=trapz(t4,mm)
- z2=trapz(t4,mmm)
- zz1=round(2*z1/bp)
- zz2=round(2*z2/bp)
- if(zz1>A/2)%logic level=(0+A)/2 or (A+0)/2 or 2.5 in this case
- a=1;
- else(zz2>A/2)
- a=0;
- end
- mn=[mn a];
-end
-disp('Binary information at Receiver');
-disp(mn);
-%Representation of Binary Information as digital signal
-bit=[];
-for n=1:length(mn);
- if(mn(n)==1);
- se=ones(1,100);
- else mn(n)==0;
- se=zeros(1,100);
- end
- bit=[bit se];
-end
-t4=bp/100:bp/100:100*length(mn)*(bp/100);
-subplot(3,1,3);
-plot(t4,bit,'Linewidth',2.5);
-grid on;
-axis([0 bp*length(mn) -0.5 1.5]);
-ylabel('amplitude(volt)');
-xlabel('Time(sec)');
-title('Received Information as digital signal after binary FSK demodulation');
-
-
-
-
-
-
-%PAM(Pulse Amplitude Modulation) waveform generation
-clc;
-clear all;
-close all;
-fc=20;
-fm=2;
-fs=1000;
-t=1;
-n=[0:1/fs:t]
-n=n(1:end-1)
-duty=20;
-s= square(2*pi*fc*n,duty);
-s(find(s<0)) = 0;
-figure(1);
-m=sin(2*pi*fm*(n-1));
-period_samp=length(n)/fc;
-ind=1:period_samp:length(n);
-on_samp=ceil(period_samp*duty/100);
-on_samp
-pam=zeros(1,length(n));
-for i=1:length(ind)
- pam(ind(i):ind(i)+on_samp) = m(ind(i));
-end
-subplot(3,1,1);plot(n,s);ylim([-0.2 1.2]);
-subplot(3,1,2);plot(n,m);ylim([-1.2 1.2]);
-subplot(3,1,3);plot(n,pam);ylim([-1.2 1.2]);
-
-
-
-
-
-
-%Polar Non Return to Zero Line Coding
-clc;
-clear all;
-close all;
-N=10; %Number of bits
-n=randi([0,1],1,N) 
-
-for m=1:N
- if n(m)==1
- nn(m)=1;
- else
- nn(m)=-1;
- end
-end
-nn
-
-i=1;
-t=0:0.01:length(n); 
-for j=1:length(t) 
- if t(j)<=i 
- y(j)=nn(i); 
- else
- y(j)=nn(i);
- i=i+1;
- end
-end
-plot(t,y, 'linewidth',2);
-axis([0,N,-1.5,1.5]); 
-grid on;
-title('Polar NZR Signaling');
-
-
-
+1
 
 
 clc;
 clear all;
-close all;
-x=[1 0 1 0 1 0 1 0 1];
-bp=0.000001;
-disp('Binary Information at transmitter');
-disp(x);
-%Representation of Transmitting binary information as digital signal
-bit=[];
-for n=1:1:length(x)
- if x(n)==1;
- se=ones(1,100);
- else
- x(n)==0;
- se=zeros(1,100);
- end
- bit=[bit se];
-end
-t1=bp/100:bp/100:100*length(x)*(bp/100);
-subplot(3,1,1)
-plot(t1,bit,'linewidth',2.5);
-grid on;
-axis([0 bp*length(x) -0.5 1.5]);
-ylabel('Amplitude (volt)');
-xlabel('Time (sec)');
-title('Transmitting Information as Digital Signal');
-%Binary PSK Modulation
-A=5;
-br=1/bp;
-f=br*2;
-t2=bp/99:bp/99:bp;
-ss=length(t2);
-m=[];
-for(i=1:1:length(x))
- if x(i)==1;
- y=A*cos(2*pi*f*t2);
- else
- y=A*cos(2*pi*f*t2+pi); %Acos(2*pi*f*t+pi) means -Acos(2*pi*f*t)
- end
- m=[m y];
-end
-t3=bp/99:bp/99:bp*length(x);
-subplot(3,1,2);
-plot(t3,m);
-grid on;
-xlabel('Time(sec)');
-ylabel('Amplitude (volt)');
-title('Waveform for binary PSK Modulation corresponding binary information');
-%Binary FSK Demodulation
-mn=[];
-for n=ss:ss:length(m)
- t=bp/99:bp/99:bp;
- y=cos(2*pi*f*t); %Carrier signal
- mm=y.*m((n-(ss-1)):n);
- t4=bp/99:bp/99:bp;
- z=trapz(t4,mm); %Intregation
- zz=round(2*z/bp);
- if(zz>0)
- a=1;
- else
- a=0;
- end
- mn=[mn a];
-end
-disp('Binary Information at Receiver After PSK Demodulation');
-disp(mn);
-%Represntation of Binary data into Digital signal
-bit=[];
-for n=1:length(mn)
- if mn(n)==1;
- se=ones(1,100);
- else
- se=zeros(1,100);
- end
- bit=[bit se];
-end
-t4=bp/100:bp/100:100*length(mn)*(bp/100);
-subplot(3,1,3)
-plot(t4,bit,'linewidth',2.5);
-grid on;
-axis([0 bp*length(mn) -0.5 1.5]);
-xlabel('Time(sec)');
-ylabel('Amplitude (volt)');
-title('Received information as Digital Signal');
+total_BW= 33;
+channel_BW= 25*2;
+total_available_channel= 33000/50
+available_control_channel= 1000/channel_BW
 
+%For N=4
+disp('(a)');
+total_No_Of_available_channel_per_cell_for_four_cell_reuse= floor(total_available_channel/4)
+number_Of_voice_channel_for_four_cell_reuse= floor((total_available_channel-available_control_channel)/4)
+number_Of_control_channel_for_four_cell_reuse= total_No_Of_available_channel_per_cell_for_four_cell_reuse-number_Of_voice_channel_for_four_cell_reuse
 
+%For N=7
+disp('(b)');
+total_No_Of_available_channel_per_cell_for_seven_cell_reuse= floor(total_available_channel/7)
+number_Of_voice_channel_for_seven_cell_reuse= floor((total_available_channel-available_control_channel)/7)
+number_Of_control_channel_for_seven_cell_reuse= total_No_Of_available_channel_per_cell_for_seven_cell_reuse-number_Of_voice_channel_for_seven_cell_reuse
 
+%For N=12
+disp('(c)');
+total_No_Of_available_channel_per_cell_for_twelve_cell_reuse= floor(total_available_channel/12)
+number_Of_voice_channel_for_twelve_cell_reuse= floor((total_available_channel-available_control_channel)/12)
+number_Of_control_channel_for_twelve_cell_reuse= total_No_Of_available_channel_per_cell_for_twelve_cell_reuse-number_Of_voice_channel_for_twelve_cell_reuse
 
-
-%QPSK waveform generation
-clc; clear all; close all;
-%x=[0 1 0 1]; %input bits
-x=randi([0 1],1,10)
-%Bits to polar
-for i=1:length(x)
- if x(i)==0
- p(i)=-1;
- else
- p(i)=1;
- end
-end
-%Seperation of even and odd sequences
-even_seq=p(1:2:length(x));
-odd_seq=p(2:2:length(x));
-%NRZ polar line coder signal generation
-i=1;
-t=0:0.01:length(x);
-m=2:2:length(x);
-for j=1:length(t)
- if t(j)<=m(i)
- even_ps(j)=even_seq(i);
- 
- else
- even_ps(j)=even_seq(i);
- i=i+1;
- end
-end
-i=1;
-m=2:2:length(x);
-for j=1:length(t)
- if t(j)<=m(i)
- odd_ps(j)=odd_seq(i);
- else
- odd_ps(j)=odd_seq(i);
- i=i+1;
- end
-end
-figure(1);
-subplot(211);
-plot(t,even_ps,'r');
-subplot(212);
-plot(t,odd_ps,'r');
-%Carrier signals generation
-c1=cos(2*pi*1*t);
-c2=sin(2*pi*1*t);
-figure(2);
-subplot(211);
-plot(t,c1,'r');
-subplot(212);
-plot(t,c2,'b');
-%QPSK Wveform generation
-r1=even_ps.*c1;
-r2=odd_ps.*c2;
-qpsk_sig=r1-r2;
-figure(3);
-subplot(311);
-plot(t,r1,'r');
-subplot(312);
-plot(t,r2,'b');
-subplot(313);
-plot(t,qpsk_sig,'b');
-
-
-
-
-%Split Phase-Manchester Coding
+2
 clc;
 clear all;
-close all;
-N=10; %Number of bits
-n=randi([0,1],1,N) %Random bit generation
-%Binary to Manchester Conversion
-nnn=[];
-for m=1:N
- if n(m)==1
- nn=[1 -1];
- else
- nn=[-1 1];
- end
- nnn=[nnn nn];
+
+%For n=4
+disp('(a)');
+n1=4
+N=7;
+%Let, Q=frequency_reuse_factor
+Q= sqrt(3*N);
+signal_to_noise_interference_ratio= 10*log10((Q^n1)/6)
+if signal_to_noise_interference_ratio> 15
+    disp('N=7 can be used.')
+else
+    disp('N=7 can not be used.')
 end
-nnn
-%Manchester Coding Pulse Shaping
-i=1;
-l=0.5;
-t=0:0.01:length(n);
-for j=1:length(t)
- if t(j)<=l %Condition for the first half cycle
- y(j)=nnn(i); %Assign first 50 values for
- else
- y(j)=nnn(i);
- i=i+1;
- l=l+0.5;
- end
+
+%For n=3
+disp('(b)');
+n2=3
+signal_to_noise_interference_ratio= 10*log10((Q^n2)/6)
+if signal_to_noise_interference_ratio> 15
+    disp('N=7 can be used.')
+else
+    disp('N=7 can not be used.')
 end
-plot(t,y,'lineWidth', 2); %Linewidth 2 for clear visualization
-axis([0,N,-1.5,1.5]); %Axis set-up
-grid on;
-title('Manchester Coding');
 
 
+N2=12;
+Q2= sqrt(3*N2);
+signal_to_noise_interference_ratio= 10*log10((Q2^n2)/6)
+if signal_to_noise_interference_ratio> 15
+    disp('N=12 can be used.')
+else
+    disp('N=12 can not be used.')
+end
 
+3
 
-
-%Unipolar Non Return to Zero Line Coding
 clc;
 clear all;
-close all;
-N=10; 
-n=randi([0,1],1,N) 
+Au=0.1;
+GOS=0.005;
+%U= Total number of user
 
-for m=1:N
- if n(m)==1
- nn(m)=1;
- else
- nn(m)=0;
- end
-end
-nn
+disp('(a)')
+C=1;
+A=0.005;
+U=ceil(A/Au)
 
-i=1;
-t=0:0.01:length(n); 
-for j=1:length(t) 
- if t(j)<=i 
- y(j)=nn(i); 
- else
- y(j)=nn(i);
- i=i+1; 
- end
-end
-plot(t,y, 'linewidth',2);
-axis([0,N,-1.5,1.5]); 
-grid on;
-title('Unipolar NZR Signaling');
+disp('(b)')
+C=5;
+A=1.13;
+U=floor(A/Au)
 
+disp('(c)')
+C=10;
+A=3.96;
+U=floor(A/Au)
 
+disp('(d)')
+C=20;
+A=11.10;
+U=floor(A/Au)
 
+disp('(e)')
+C=100;
+A=80.9;
+U=floor(A/Au)
 
-%RZ Unipolar line coding
+4
+
 clc;
 clear all;
-close all;
-N=10; %Number of bits
-n=randi([0,1],1,N) %Random bit generation
-%RZ Pulse Shaping
-i=1;
-a=0; %Initial value for the first half cycle
-b=0.5; %Initial value for the second half cycle
-t=0:0.01:length(n);
-for j=1:length(t)
- if t(j)>=a && t(j)<=b %Condition for the first half cycle
- y(j)=n(i); %Assign first 50 values for
- elseif t(j)>b && t(j)<=i %Condition for the Second half cycle
- y(j)=0; %Set all values 0 for the second half cycle
- else
- i=i+1; %Binary input data index increment
- a=a+1; %Initial value for the first half cycle increment
- b=b+1; %Initial value for the second half cycle increment
- end
-end
-plot(t,y,'lineWidth', 2); %Linewidth 2 for clear visualization
-axis([0,N,-1.5,1.5]); %Axis set-up
-grid on;
-title('Unipolar return-to-zero (RZ) signaling');
+blocking_probability= 2/100;
+% Au= traffic_intensity_per_user
+Au= (2/60)*3;
+
+disp('For System A')
+number_of_channel_per_cell=19;
+A=12;
+U=A/Au;
+%Aa=total_no_of_subscriber_supported_by_A
+Aa= U*394;
+
+
+number_of_channel_per_cell=57;
+A=45;
+U=A/Au;
+%B=total_no_of_subscriber_supported_by_B
+B= U*98;
+
+
+number_of_channel_per_cell=100;
+A=88;
+U=A/Au;
+%C=total_no_of_subscriber_supported_by_C
+C= U*49;
+%T=total number of subscriber supported by A,B & C
+T=Aa+B+C;
+disp('Total number of subscriber of A=')
+disp(Aa)
+percentage_market_penetration_for_A=(Aa/2000000)*100 
+
+disp('For System B')
+disp('Total number of subscriber of B=')
+disp(B)
+percentage_market_penetration_for_B=(B/2000000)*100
+
+disp('For System C')
+disp('Total number of subscriber of C=')
+disp(C)
+percentage_market_penetration_for_C=(C/2000000)*100
+
+disp('total number of subscriber supported by A,B & C')
+disp(T)
+market_penetration_for_three_system=(T/2000000)
+
+5
+
+clc;
+clear all;
+blocking_probability= 2/100;
+% Au= traffic_intensity_per_user
+Au= (2/60)*3;
+
+disp('For System A')
+number_of_channel_per_cell=19;
+A=12;
+U=A/Au;
+%Aa=total_no_of_subscriber_supported_by_A
+Aa= U*394;
+
+
+number_of_channel_per_cell=57;
+A=45;
+U=A/Au;
+%B=total_no_of_subscriber_supported_by_B
+B= U*98;
+
+
+number_of_channel_per_cell=100;
+A=88;
+U=A/Au;
+%C=total_no_of_subscriber_supported_by_C
+C= U*49;
+%T=total number of subscriber supported by A,B & C
+T=Aa+B+C;
+disp('Total number of subscriber of A=')
+disp(Aa)
+percentage_market_penetration_for_A=(Aa/2000000)*100 
+
+disp('For System B')
+disp('Total number of subscriber of B=')
+disp(B)
+percentage_market_penetration_for_B=(B/2000000)*100
+
+disp('For System C')
+disp('Total number of subscriber of C=')
+disp(C)
+percentage_market_penetration_for_C=(C/2000000)*100
+
+disp('total number of subscriber supported by A,B & C')
+disp(T)
+market_penetration_for_three_system=(T/2000000)
+
+6
+
+clc;
+clear all;
+T_R_distance= 5;
+E_field= 10^-3;
+d0=1000;
+d=5000;
+ht=50;
+hr=1.5;
+frequency=900;
+lemda= 300/900;
+disp('(a)')
+length_of_antenna=lemda/4
+gain=(10^(2.555/10))
+disp('(b)')
+Er_d= (2*E_field*d0*2*3.1416*ht*hr)/(lemda*d*d)
+Ae=(gain*lemda^2)/(4*3.1416);
+Pr_d= (Er_d^2/(120*3.1416))*Ae
+
+received_power_at_5_km_distance= 10*log10(Pr_d)
+
+7
+
+clc;
+clear all;
+hm=2;
+fc=900;
+hb=100;
+d=4;
+a_hm=(3.2*(log10(11.75*hm))^2)-4.97
+%disp('Loss Path')
+Lp=69.55+26.16*log10(fc)-13.82*log10(hb)-a_hm+(44.9-6.55*log10(hb))*log10(d);
+disp('Loss Path'); disp(Lp);
+
+8
+
+clc;
+clear all;
+fc=1.8;
+hb=20;
+%d=distance of mobile from base station
+d=((20^2+30^2)^0.5)/1000;
+
+Path_Loss=135.41+(12.49*log10(fc))-(4.99*log10(hb))+((46.84-2.34*log10(hb))*log10(d))
+
+
