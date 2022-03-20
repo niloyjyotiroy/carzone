@@ -1,241 +1,365 @@
-1
+#huffman
+#include<bits/stdc++.h>
+
+using namespace std;
+
+main()
+{
+    int n;
+    cout<<"Enter number of symbols n = ";
+    cin>>n;
+    int symbl_len;
+    pair<double, string> records[n];
+    priority_queue<pair<double, string> >pq;
+
+    cout<<"Enter symbol - probability pair"<<endl;
+    for(int i=0; i<n; i++)
+    {
+        string symbol;
+        double probability;
+        cin>>symbol>>probability;
+        records[i]={-probability, symbol};
+        pq.push(records[i]);
+        symbl_len=symbol.length();
+    }
+    stack<pair<string, string> > st;
+    while(!pq.empty())
+    {
+        pair<double, string> left = pq.top();
+        pq.pop();
+        if(pq.empty())
+        {
+            break;
+        }
+        pair<double, string> right = pq.top();
+        pq.pop();
+
+        string common=left.second+right.second;
+        double total=left.first+right.first;
+        pq.push({total, common});
+        st.push({left.second, right.second});
+
+    }
+
+    map<string, string> code;
+    while(!st.empty())
+    {
+        pair<string, string> common=st.top();
+        st.pop();
+        string left = common.first, right = common.second;
+        for(int i=0; i<left.length(); i+=symbl_len)
+        {
+            string ch="";
+            for(int j=i; j<i+symbl_len; j++)
+            {
+                ch+=left[j];
+            }
+            code[ch]=code[ch]+"0";
+        }
+        for(int i=0; i<right.length(); i+=symbl_len)
+        {
+            string ch="";
+            for(int j=i; j<i+symbl_len; j++)
+            {
+                ch+=right[j];
+            }
+            code[ch]=code[ch]+"1";
+        }
+    }
+    cout<<"Huffman code for those given symbols are given bellow."<<endl;
+    for(auto it:code)
+    {
+        cout<<it.first<<" --> "<<it.second<<endl;
+        cout<<"---------------------------"<<endl;
+    }
+}
+
+#convolution code
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+vector<int>generate_g(string G){
+    vector<int>g;
+    for(int i = 0; i < G.length(); i++)
+    {
+        if(G[i]=='1')
+        {
+            g.push_back(i);
+        }
+    }
+    return g;
+}
+
+vector<int> multiply(vector<int> g, vector<int> m)
+{
+    vector<int>y;
+    for(int i = 0; i < g.size(); i++)
+    {
+        for(int j = 0; j < m.size(); j++)
+        {
+            y.push_back(g[i]+m[j]);
+        }
+    }
+    return y;
+}
+
+void printv(vector<int>v)
+{
+    for(int i=0; i<v.size(); i++)
+    {
+        cout<<v[i]<<" ";
+    }
+    cout<<endl;
+}
+
+main(){
+    string G2 = "101", G1 = "111";
+    string message;
+    cout<<"Enter the message bit sequence : ";
+    cin>>message;
+
+    vector<int>g1, g2, m;
+
+    int i=0;
+    g1 = generate_g(G1);
+    g2 = generate_g(G2);
+    m = generate_g(message);
+
+    vector<int>y1, y2;
+    y1 = multiply(g1, m);
+    y2 = multiply(g2, m);
+
+    sort(y1.begin(), y1.end());
+    sort(y2.begin(), y2.end());
+
+    cout<<"Y1 = ";
+    printv(y1);
+    cout<<"Y2 = ";
+    printv(y2);
+
+    int mexlen = max(*(y1.end()-1), *(y2.end()-1));
+
+    int code1[mexlen+1] , code2[mexlen+1];
+    memset(code1, 0, sizeof(code1));
+    memset(code2, 0, sizeof(code2));
+    for(i=0; i<y1.size(); i++)
+    {
+        code1[y1[i]]^=1;
+    }
+    for(i=0; i<y2.size(); i++)
+    {
+        code2[y2[i]]^=1;
+    }
+    for(int i=0; i<=mexlen; i++)
+    {
+        cout<<code1[i]<<code2[i]<<" ";
+    }
+    cout<<endl;
+}
+
+#updated hamming code
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    string s;
+    cout<<"Enter the given sequence - ";
+    cin>>s;
+    int n=s.size();
+
+    // step 1: koyta hamming bit lagbe
+    int total_parity=0;
+    for(int i=1; i<n; i++){
+        if(pow(2, i) >= n+i+1){
+            total_parity=i;
+            break;
+        }
+    }
+
+	// step 2: hamming bit gula koi koi bosbe
+    vector<int>pows;
+    for(int i=0; i<total_parity; i++){
+        pows.push_back(pow(2,i));
+    }
+
+    // step 3: hamming bit er position bad dia bakigula bosailam
+    int ans[n+total_parity+1]={}, j=n-1;
+    for(int i=1; i<=n+total_parity and j>=0; i++){
+        if( !count(pows.begin(), pows.end(), i) ){
+            ans[i] = (s[j]=='0' ? 0:1);
+            j--;
+        }
+    }
+
+	// stp 4: calculating hamming bits
+    cout<<"Here,"<<endl;
+    for(int i=0; i<pows.size(); i++){
+		// full array er jesob index er i-th bit 1 oigulate gunbo 1 ache kina
+		int parity=0;
+    	for(int j=1; j<=n+total_parity; j++){
+    		if( j&(1<<i) ){
+    			parity ^= ans[j]; // xor diye even parity er kaaj kora hocche
+    		}
+    	}
+    	cout<<"H"<<i<<" = "<<parity<<endl;
+    	ans[pows[i]] = parity;
+    }
+
+    cout<<"Final output is : ";
+    for(int i=n+total_parity; i>0; i--){
+        cout<<ans[i]<<" ";
+    }
+    cout<<endl;
+
+    //For decoding[detection of the error bit]
+    cout<<"For changing one bit, select an index[form right]: ";
+    int index;
+    cin>>index;
+    if(ans[index]==1) ans[index] = 0;
+    else ans[index] = 1;
+
+    cout<<"After changing the bit: ";
+    for(int i=n+total_parity; i>0; i--){
+        cout<<ans[i]<<" ";
+    }
+    cout<<endl;
+
+	// calculating D0,D1,D2...
+	vector<int>D;
+    cout<<"Here,"<<endl;
+    for(int i=0; i<total_parity; i++){
+		// full array er jesob index er i-th bit 1 oigulate gunbo 1 ache kina
+		int parity=0;
+    	for(int j=1; j<=n+total_parity; j++){
+    		if( j&(1<<i) ){
+    			parity ^= ans[j]; // xor diye even parity er kaaj kora hocche
+    		}
+    	}
+    	cout<<"D"<<i<<" = "<<parity<<endl;
+    	D.push_back(parity);
+    }
+
+    //D er value gula dia binary deciaml kora
+    int errorIndex=1;
+    bool start=0;
+    for(int i=D.size()-1, j=0; i>=0; i--){
+    	if(D[i]==1) start=1;
+
+    	if(start==1) {
+    		errorIndex += D[i] * pow(2,j);
+    		j++;
+    	}
+    }
+    cout<<"Error happend in the index no: "<<errorIndex<<endl;
+}
+
+#hamming code
+
+#include <bits/stdc++.h>
+
+unsigned int number_of_parity_bits(unsigned int n) {
+	unsigned int p = 1;
+	while(!(pow(2, p) >= (n + p + 1))) p++;
+	return p;
+}
+bool powerOfTwo(int n) {
+    return n && (!(n & (n-1)));
+}
+
+int main() {
+	std::string s;
+	std::cin >> s;
+	unsigned int n = s.size(), p = number_of_parity_bits(n), sum = 0;
+	unsigned long int N = std::bitset<32>(s).to_ulong(), mask = 1;	
+	std::bitset<16> hamming_code;	
+	
+	for(int i=1; i<=p; i++) {
+		sum = 0;
+		for(int j=1, k=0; j<=(n+p); j++) {
+			if(!powerOfTwo(j)) {
+				sum = ((j & (mask << (i-1))) && (N & (mask << k))) ? (sum + 1) : sum;
+				if(i==1 && (N & (mask << k))) hamming_code |= (mask << (j-1));
+				k++;
+			}
+		}
+		if(sum & mask) hamming_code |= (mask << ((int)pow(2, i-1) - 1));
+	}
+	std::cout << hamming_code << std::endl;
+	return 0;
+}
+
+#lempel
+
+#include<bits/stdc++.h>
+
+using namespace std;
 
 
-clc;
-clear all;
-total_BW= 33;
-channel_BW= 25*2;
-total_available_channel= 33000/50
-available_control_channel= 1000/channel_BW
+main()
+{
+    int n;
+    string sequence;
+    cout<<"Enter the binary sequence : ";
+    cin>>sequence;
 
-%For N=4
-disp('(a)');
-total_No_Of_available_channel_per_cell_for_four_cell_reuse= floor(total_available_channel/4)
-number_Of_voice_channel_for_four_cell_reuse= floor((total_available_channel-available_control_channel)/4)
-number_Of_control_channel_for_four_cell_reuse= total_No_Of_available_channel_per_cell_for_four_cell_reuse-number_Of_voice_channel_for_four_cell_reuse
+    n=sequence.length();
 
-%For N=7
-disp('(b)');
-total_No_Of_available_channel_per_cell_for_seven_cell_reuse= floor(total_available_channel/7)
-number_Of_voice_channel_for_seven_cell_reuse= floor((total_available_channel-available_control_channel)/7)
-number_Of_control_channel_for_seven_cell_reuse= total_No_Of_available_channel_per_cell_for_seven_cell_reuse-number_Of_voice_channel_for_seven_cell_reuse
+    map<string, int>mp;
+    vector<pair<int, int> >p;
+    vector<pair<int, string> >q;
 
-%For N=12
-disp('(c)');
-total_No_Of_available_channel_per_cell_for_twelve_cell_reuse= floor(total_available_channel/12)
-number_Of_voice_channel_for_twelve_cell_reuse= floor((total_available_channel-available_control_channel)/12)
-number_Of_control_channel_for_twelve_cell_reuse= total_No_Of_available_channel_per_cell_for_twelve_cell_reuse-number_Of_voice_channel_for_twelve_cell_reuse
+    mp["0"]=1;
+    mp["1"]=2;
+    p.push_back({1, 0});
+    p.push_back({2, 1});
 
-2
-clc;
-clear all;
+    int j=3;
 
-%For n=4
-disp('(a)');
-n1=4
-N=7;
-%Let, Q=frequency_reuse_factor
-Q= sqrt(3*N);
-signal_to_noise_interference_ratio= 10*log10((Q^n1)/6)
-if signal_to_noise_interference_ratio> 15
-    disp('N=7 can be used.')
-else
-    disp('N=7 can not be used.')
-end
-
-%For n=3
-disp('(b)');
-n2=3
-signal_to_noise_interference_ratio= 10*log10((Q^n2)/6)
-if signal_to_noise_interference_ratio> 15
-    disp('N=7 can be used.')
-else
-    disp('N=7 can not be used.')
-end
-
-
-N2=12;
-Q2= sqrt(3*N2);
-signal_to_noise_interference_ratio= 10*log10((Q2^n2)/6)
-if signal_to_noise_interference_ratio> 15
-    disp('N=12 can be used.')
-else
-    disp('N=12 can not be used.')
-end
-
-3
-
-clc;
-clear all;
-Au=0.1;
-GOS=0.005;
-%U= Total number of user
-
-disp('(a)')
-C=1;
-A=0.005;
-U=ceil(A/Au)
-
-disp('(b)')
-C=5;
-A=1.13;
-U=floor(A/Au)
-
-disp('(c)')
-C=10;
-A=3.96;
-U=floor(A/Au)
-
-disp('(d)')
-C=20;
-A=11.10;
-U=floor(A/Au)
-
-disp('(e)')
-C=100;
-A=80.9;
-U=floor(A/Au)
-
-4
-
-clc;
-clear all;
-blocking_probability= 2/100;
-% Au= traffic_intensity_per_user
-Au= (2/60)*3;
-
-disp('For System A')
-number_of_channel_per_cell=19;
-A=12;
-U=A/Au;
-%Aa=total_no_of_subscriber_supported_by_A
-Aa= U*394;
+    for(int i=0; i<n; i)
+    {
+        string st="";
+        st+=sequence[i];
+        i++;
+        int prefix=mp[st];
+        while(mp[st] and i<n)
+        {
+            st+=sequence[i];
+            i++;
+            if(mp[st])
+            {
+                prefix=mp[st];
+            }
+        }
+        if(i<=n and !mp[st]){
+            mp[st]=j;
+            prefix*=2;
+            if(sequence[i-1]=='1')
+                prefix+=1;
+            p.push_back({j, prefix});
+            j++;
+        }
+    }
+    int mex_len=0;
+    for(auto it:mp)
+    {
+        q.push_back({it.second, it.first});
+        //cout<<it.first<<" "<<it.second<<endl;
+        int x=it.first.length();
+        mex_len=max(mex_len, x);
+    }
+    sort(p.begin(), p.end());
+    sort(q.begin(), q.end());
 
 
-number_of_channel_per_cell=57;
-A=45;
-U=A/Au;
-%B=total_no_of_subscriber_supported_by_B
-B= U*98;
-
-
-number_of_channel_per_cell=100;
-A=88;
-U=A/Au;
-%C=total_no_of_subscriber_supported_by_C
-C= U*49;
-%T=total number of subscriber supported by A,B & C
-T=Aa+B+C;
-disp('Total number of subscriber of A=')
-disp(Aa)
-percentage_market_penetration_for_A=(Aa/2000000)*100 
-
-disp('For System B')
-disp('Total number of subscriber of B=')
-disp(B)
-percentage_market_penetration_for_B=(B/2000000)*100
-
-disp('For System C')
-disp('Total number of subscriber of C=')
-disp(C)
-percentage_market_penetration_for_C=(C/2000000)*100
-
-disp('total number of subscriber supported by A,B & C')
-disp(T)
-market_penetration_for_three_system=(T/2000000)
-
-5
-
-clc;
-clear all;
-blocking_probability= 2/100;
-% Au= traffic_intensity_per_user
-Au= (2/60)*3;
-
-disp('For System A')
-number_of_channel_per_cell=19;
-A=12;
-U=A/Au;
-%Aa=total_no_of_subscriber_supported_by_A
-Aa= U*394;
-
-
-number_of_channel_per_cell=57;
-A=45;
-U=A/Au;
-%B=total_no_of_subscriber_supported_by_B
-B= U*98;
-
-
-number_of_channel_per_cell=100;
-A=88;
-U=A/Au;
-%C=total_no_of_subscriber_supported_by_C
-C= U*49;
-%T=total number of subscriber supported by A,B & C
-T=Aa+B+C;
-disp('Total number of subscriber of A=')
-disp(Aa)
-percentage_market_penetration_for_A=(Aa/2000000)*100 
-
-disp('For System B')
-disp('Total number of subscriber of B=')
-disp(B)
-percentage_market_penetration_for_B=(B/2000000)*100
-
-disp('For System C')
-disp('Total number of subscriber of C=')
-disp(C)
-percentage_market_penetration_for_C=(C/2000000)*100
-
-disp('total number of subscriber supported by A,B & C')
-disp(T)
-market_penetration_for_three_system=(T/2000000)
-
-6
-
-clc;
-clear all;
-T_R_distance= 5;
-E_field= 10^-3;
-d0=1000;
-d=5000;
-ht=50;
-hr=1.5;
-frequency=900;
-lemda= 300/900;
-disp('(a)')
-length_of_antenna=lemda/4
-gain=(10^(2.555/10))
-disp('(b)')
-Er_d= (2*E_field*d0*2*3.1416*ht*hr)/(lemda*d*d)
-Ae=(gain*lemda^2)/(4*3.1416);
-Pr_d= (Er_d^2/(120*3.1416))*Ae
-
-received_power_at_5_km_distance= 10*log10(Pr_d)
-
-7
-
-clc;
-clear all;
-hm=2;
-fc=900;
-hb=100;
-d=4;
-a_hm=(3.2*(log10(11.75*hm))^2)-4.97
-%disp('Loss Path')
-Lp=69.55+26.16*log10(fc)-13.82*log10(hb)-a_hm+(44.9-6.55*log10(hb))*log10(d);
-disp('Loss Path'); disp(Lp);
-
-8
-
-clc;
-clear all;
-fc=1.8;
-hb=20;
-%d=distance of mobile from base station
-d=((20^2+30^2)^0.5)/1000;
-
-Path_Loss=135.41+(12.49*log10(fc))-(4.99*log10(hb))+((46.84-2.34*log10(hb))*log10(d))
-
+    cout<<p[0].first<<" ---> "<<q[0].second<<endl;
+    cout<<p[1].first<<" ---> "<<q[0].second<<endl;
+    for(int i=2; i<p.size(); i++)
+    {
+        cout<<p[i].first<<" ---> "<<q[i].second<<" ---> "<<bitset<4>(p[i].second)<<endl;
+    }
+}
 
