@@ -1,373 +1,125 @@
----playfar-----update---
-def matrix(x, y, initial):
-    return [[initial for i in range(x)] for j in range(y)]
+#include<bits/stdc++.h>
+using namespace std;
+
+int total_bandwidth=30000;
+int channel_bandwidth=25*2;
+int total_available_channel=total_bandwidth/channel_bandwidth;
+int allocated_spectrum=1000;
+int available_control_channel=allocated_spectrum/channel_bandwidth;
+void channel_distribution(double N){
+    cout<<"For "<< N<<" cell reuse"<<endl;
+    double total_channel=total_available_channel/N;
+    double voice_channel=(total_available_channel-available_control_channel)/N;
+    double control_channel=total_channel-voice_channel;
+    cout<<"Total number of channel per cell: "<< round(total_channel)<<endl;
+    cout<<"Voice channel per cell: "<< round(voice_channel)<<endl;
+    cout<<"control channel per cell: "<< round(control_channel)<<endl;
+
+}
+main(){
+    channel_distribution(4);
+    channel_distribution(7);
+    channel_distribution(12);
+    
+    
+    
+#include<bits/stdc++.h>
+
+using namespace std;
+
+void cluster_size(double n, double SNRgiven, double N)
+{
+    double I = 6;
+
+    double Q = sqrt(3*N);
+    double SNRdb = 10*log10((pow(Q,n))/I);
+    cout<<"For n = "<<n<<endl;
+    if(SNRgiven <= SNRdb)
+    {
+        cout<<"N = "<<N<<" can be used. "<<endl;
+        cout<<"Output SNRdb for N = "<<N<<" is : "<<SNRdb<<endl;
+    }
+    else{
+        cout<<"N = "<<N<<" can not be used. "<<endl;
+    }
+    cout<<endl;
+}
+
+main()
+{
+    //cluster_size(4, 15, 3);
+    cluster_size(4, 16, 7);
+    cluster_size(3, 16, 7);
+    cluster_size(3, 16, 12);
+    cluster_size(3,16,19);
+}
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+double A(int tc){
+    if(tc==1){
+        return .005;
+    }
+    else if(tc==5){
+        return 1.13;
+    }
+    else if(tc==10){
+        return 3.96;
+    }
+    else if (tc==20){
+        return 11.1;
+    }
+    else if(tc==100){
+        return 80.9;
+    }
+}
+main(){
+    double Au = 0.1;
+    double GOS = (.5/100);
+    double C[]={1, 5, 10, 20, 100};
+    for(auto it: C){
+        cout<<"Total supported users for available channel C = "<<it<<" is : ";
+        double U = A(it)/Au;
+        cout<<U<<" \nby taking ceiling value : "<<ceil(U)<<endl;
+        cout<<endl;
+    }
+}
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+double Au = (2.0*3.0)/60.0;
+double GOS = (2/100);
+double C[]={19, 57, 100};
+double cells[]={394, 98, 49};
+double A(int tc){
+    if(tc==19){
+        return 12.0;
+    }
+    else if(tc==57){
+        return 45.0;
+    }
+    else if(tc==100){
+        return 88.0;
+    }
+}
+void calculate(int i){
+    double U = A(C[i])/Au;
+    cout<<U<<" \nby taking ceiling value : "<<ceil(U)<<endl;
+    cout<<"It can support total "<<U*cells[i]<<" users"<<endl;
+    cout<<"Which is "<<(U*cells[i]/2e6)*100<<"% of the total population."<<endl;
+    cout<<endl;
+}
+main(){
+    cout<<"Total supported users for system A per cell is : ";
+    calculate(0);
+    cout<<"Total supported users for system B per cell is : ";
+    calculate(1);
+    cout<<"Total supported users for system C per cell is : ";
+    calculate(2);
+}
 
-
-def locindex(c):  # get location of each character
-    loc = list()
-    if c == 'J':
-        c = 'I'
-    for i, j in enumerate(my_matrix):
-        for k, l in enumerate(j):
-            if c == l:
-                loc.append(i)
-                loc.append(k)
-                return loc
-
-
-def encrypt(msg):  # Encryption
-    msg = msg.upper()
-    msg = msg.replace(" ", "")
-    i = 0
-    for s in range(0, len(msg) + 1, 2):
-        if s < len(msg) - 1:
-            if msg[s] == msg[s + 1]:
-                msg = msg[:s + 1] + 'X' + msg[s + 1:]
-
-    if len(msg) % 2 != 0:
-        msg = msg[:] + 'X'
-    print("CIPHER TEXT:", end=' ')
-    encryptMes = ''
-    while i < len(msg):
-        loc = list()
-        loc = locindex(msg[i])
-        loc1 = list()
-        loc1 = locindex(msg[i + 1])
-        if loc[1] == loc1[1]:
-            encryptMes += "{}{}".format(my_matrix[(loc[0] + 1) % 5][loc[1]], my_matrix[(loc1[0] + 1) % 5][loc1[1]])
-        elif loc[0] == loc1[0]:
-            encryptMes += "{}{}".format(my_matrix[loc[0]][(loc[1] + 1) % 5], my_matrix[loc1[0]][(loc1[1] + 1) % 5])
-        else:
-            encryptMes += "{}{}".format(my_matrix[loc[0]][loc1[1]], my_matrix[loc1[0]][loc[1]])
-        i = i + 2
-    return encryptMes
-
-
-def decrypt(msg):  # decryption
-    msg = msg.upper()
-    msg = msg.replace(" ", "")
-    print("PLAIN TEXT:", end=' ')
-    i = 0
-    decryption = ''
-    while i < len(msg):
-        loc = list()
-        loc = locindex(msg[i])
-        loc1 = list()
-        loc1 = locindex(msg[i + 1])
-        if loc[1] == loc1[1]:
-            decryption += "{}{}".format(my_matrix[(loc[0] - 1) % 5][loc[1]], my_matrix[(loc1[0] - 1) % 5][loc1[1]])
-        elif loc[0] == loc1[0]:
-            decryption += "{}{}".format(my_matrix[loc[0]][(loc[1] - 1) % 5], my_matrix[loc1[0]][(loc1[1] - 1) % 5])
-        else:
-            decryption += "{}{}".format(my_matrix[loc[0]][loc1[1]], my_matrix[loc1[0]][loc[1]])
-        i = i + 2
-    return decryption
-
-
-key = input("Enter key ")
-key = key.replace(" ", "")
-key = key.upper()
-
-
-
-result = []
-for c in key:  # storing key
-    if c not in result:
-        if c == 'J':
-            result.append('I')
-        else:
-            result.append(c)
-#print(result)
-flag = 0
-for i in range(65, 91):  # storing other character
-    if chr(i) not in result:
-        if i == 73 and chr(74) not in result:
-            result.append("I")
-            flag = 1
-        elif flag == 0 and i == 73 or i == 74:
-            pass
-        else:
-            result.append(chr(i))
-#print(result)
-k = 0
-my_matrix = matrix(5, 5, 0)  # initialize matrix
-
-
-for i in range(0, 5):  # making matrix
-    for j in range(0, 5):
-        my_matrix[i][j] = result[k]
-        k += 1
-
-msg = str(input("ENTER MSG:"))
-
-message = msg.replace(" ","")
-
-encryption = encrypt(msg)
-
-print(encryption)
-decryption = decrypt(encryption)
-
-output = ''
-
-index = 0
-for ch in msg:
-    if(ch==' '):
-        output+=' '
-        index-=1
-    else:
-        output+=decryption[index]
-    index+=1
-
-
-
-value = len(decryption) - len(message)
-
-if(len(decryption)>len(message)):
-    output+=decryption[len(decryption)-value:]
-
-print(output)
-print(decryption)
-
-----polyalphabetic----
-
-key_word = input("Enter key Word: ")
-#key_word = 'deceptive'
-
-message = input("Enter Message: ")
-mainMessage = message
-message=message.replace(" ","")
-#message = "wearediscoveredsaveyourself"
-print("Message = ", message)
-key_word_list = list(key_word)
-key = ''
-mess_len = len(message)
-key_word_len = len(key_word)
-for i in range(mess_len):
-    key = key + key_word_list[(i%key_word_len)]
-print("Key =     ", key)
-
-key_list = list(key)
-mess_list = list(message)
-
-cipher_list = []
-for i in range(mess_len):
-    sum = (ord(key_list[i].upper()) + ord(mess_list[i].upper()) - (65*2))%26
-    cipher_list.append(chr(sum + 65))
-
-cipher = ''
-for ch in cipher_list:
-    cipher = cipher + ch
-
-print("Cipher Text:", cipher )
-
-dec_mess_list = []
-for i in range(mess_len):
-    sum = (ord(cipher_list[i].upper()) - ord(key_list[i].upper()) - (65*2))%26
-    dec_mess_list.append(chr(sum + 65))
-
-dec_mess = ''
-for ch in dec_mess_list:
-    dec_mess = dec_mess + ch
-
-output = ''
-
-index = 0
-for ch in mainMessage:
-    if(ch==' '):
-        output+=' '
-        index-=1
-    else:
-        output+=dec_mess[index]
-    index+=1
-print("Decrypted Text:", output)
-
----diffie-hellman----
-
-import math
-
-q = int(input("Enter Prime number, q: "))
-
-
-def primRoots(modulo):
-    coprime_set = {num for num in range(1, modulo) if math.gcd(num, modulo) == 1}  # 1,2,3,4,5,6
-    return [g for g in range(1, modulo)
-            if coprime_set == {pow(g, powers, modulo)
-                               for powers in range(1, modulo)}]
-
-
-print("Primitive root of q are: ")
-
-for i in primRoots(q):
-    print(i, end=" ")
-print("")
-
-alpha = int(input("Select a Primitive root of q: "))
-
-xa = int(input("select User A Privet Key: "))
-assert xa < q, "Error"
-xb = int(input("select User B Privet Key: "))
-assert xb < q, "Error"
-
-public_key_of_user_a = pow(alpha, xa) % q
-public_key_of_user_b = pow(alpha, xb) % q
-
-secret_key_of_user_a = pow(public_key_of_user_b, xa) % q
-secret_key_of_user_b = pow(public_key_of_user_a, xb) % q
-
-print("USER A Secret key = ", secret_key_of_user_a)
-print("USER B Secret key = ", secret_key_of_user_b)
-
----rsa-----
-import math
-
-p = int(input("input p: "))
-q = int(input("input q: "))
-
-n = p * q
-phi_of_n = (p - 1) * (q - 1)
-
-print("possible values of e are: ")
-for e in range(2, phi_of_n):
-    if math.gcd(e, phi_of_n) == 1:
-        print(e, end=" ")
-print(" ")
-e = int(input("Select a value for e: "))
-
-for d in range(2, phi_of_n):
-    if (d * e) % phi_of_n == 1:
-        break
-
-print(f"Public key {e, n}")
-print(f"Private key {d, n}")
-
-m = int(input("message bit: "))
-
-assert m < n, "RSA Error"
-
-c = pow(m, e) % n
-
-print(f"Message Encrypted as: {c}")
-
-dm = pow(c, d) % n
-
-print(f"Message Decrypted as: {dm}")
-
-
----gcd----
-
-def mygcd(a, b):
-    if (b == 0):
-        return a
-    else:
-        return mygcd(b, a % b)
-
-
-a = int(input("Enter a: "))
-b = int(input("Enter b: "))
-
-result = mygcd(a,b)
-print('gcd (%s , %s ) = %s ' %(a, b, result))
-
-____monoalphabetic____
-import random
-plain_text=[]
-key=[]
-for i in range (65,91):
-    plain_text.append(chr(i))
-    key.append(chr(i))
-
-message=input("Enter Message: ")
-random.shuffle(key)
-print("Plain Text: ", plain_text)
-print("Cipher: ", key)
-cipher= ''
-for ch in message:
-    try:
-        index=plain_text.index(ch.upper())
-        cipher= cipher+key[index]
-    except:
-        cipher=cipher+ch
-
-print("Encryption: ",cipher)
-
-decryted= ''
-for ch in cipher:
-    try:
-        index=key.index(ch.upper())
-        decryted=decryted+plain_text[index]
-    except:
-        decryted=decryted+ch
-print("Decryption: ",decryted)
-
-----caeser cipher-----
-
-def encrypt(string,key):
-    cip=' '
-    for char in string:
-        if char == ' ':
-            cip=cip+char
-        elif char.isupper():
-            cip=cip+chr((ord(char)+key-65)%26+65)
-        else:
-            cip=cip+chr((ord(char)+key-97)%26+97)
-    return cip
-def decrypt(ciph,key):
-    plain=' '
-    for char in ciph:
-        if char==' ':
-            plain=plain+char
-        elif char.isupper():
-            plain=plain+chr((ord(char)-key-65)%26+65)
-        else:
-            plain=plain+chr((ord(char)-key-97)%26+97)
-    return plain
-
-text=input("Enter message: ")
-s=int(input("Enter shift Key: "))
-print("Orginal String: ", text)
-print("Encryption: ",encrypt(text,s))
-cipher=encrypt(text,s)
-print ("Decryption: ",decrypt(cipher,s))
-
-_____caeser cipher update_______
-def encrypt(string, shift):
-    cipher = ' '
-    for char in string:
-        if char == ' ':
-            cipher = cipher + char
-        elif char.isupper():
-            cipher = cipher + chr((ord(char) + shift - 65) % 31 + 65)
-        else:
-            cipher = cipher + chr((ord(char) + shift - 97) % 31 + 97)
-    return cipher
-
-def decrypt(cipher, shift):
-    plain = ''
-    for char in cipher:
-        if char == ' ':
-            plain = plain + char
-        elif char.isupper():
-            plain = plain + chr((ord(char) - shift - 65) % 31 + 65)
-        else:
-            plain = plain + chr((ord(char) - shift - 97) % 31 + 97)
-
-
-    return plain
-
-
-text = input("Enter string: ")
-s = int(input("Enter shift number: "))
-print("Original string: ", text)
-plain_text = []
-for i in range(65, 65+26):
-    plain_text.append(chr(i))
-key =[]
-plain=''
-for j in range(65, (65+26)):
-    plain = chr((j + s - 65) % 26 + 65)
-    key.append(plain)
-plain=encrypt(text,s)
-print("Plain Text: ",plain_text)
-print("Key:        ",key)
-print("After encryption: ", encrypt(text, s))
-print("After decryption :",decrypt(plain,s))
